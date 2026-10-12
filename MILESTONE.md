@@ -19,17 +19,18 @@
 
 **목표:** 프로젝트 제약을 지키는 실행 가능한 Angular 기반을 마련한다.
 
-- Yarn Berry Plug'n'Play로 의존성을 설치하고 실행한다.
+- 저장소 루트에 Angular 앱을 구성하고 `frontend/` 하위 프로젝트를 만들지 않는다.
+- Yarn Berry 4.18.1 Plug'n'Play를 사용하고 `.yarn` 전체를 저장소에서 관리한다. `.yarn/cache`에는 의존성 아카이브를 두며 `.yarn/unplugged`에는 플랫폼별 빌드 산출물이 포함될 수 있다.
 - Angular를 NgModule 기반으로 구성하고 Standalone을 사용하지 않는다.
-- Node.js 24와 Angular 21.2 LTS를 고정한다.
+- Node.js 24와 Angular 21.2 LTS를 고정한다. Node 24 요구사항은 `.nvmrc`와 `package.json`에 선언하며 시스템 기본 Node 버전을 자동 변경하지 않는다.
 - CSR, Angular Routing, Less 구성을 마련한다. Angular CLI의 Vite 개발 서버와 esbuild 프로덕션 빌더를 사용한다.
-- Firebase 프로젝트 연결 설정을 개발 및 배포 환경에서 관리한다.
+- 로컬 개발과 배포에서 Firebase 프로젝트 `market-mon-51ee9`를 함께 사용하고 공개 웹 설정을 저장소에 포함한다.
 - 한국어 랜딩·로그인 안내·404 화면과 공통 레이아웃을 마련한다.
-- Firebase JS SDK 초기화를 준비하되 Google 로그인은 M2에서 연결한다.
+- Firebase 모듈형 JS SDK를 직접 초기화하며 AngularFire는 사용하지 않는다. Google 로그인은 M2에서 연결한다.
 
 **완료 기준:** 애플리케이션이 로컬에서 빌드·실행되며, 라우트 이동이 동작한다. SSR, Standalone, CSS·SCSS, npm 의존성 설치, `node_modules` 링크 방식을 사용하지 않는다.
 
-**상태:** 완료. Node 24에서 Yarn PnP 설치 후 프로덕션 빌드가 성공했고, 홈·로그인 안내·알 수 없는 경로의 SPA 직접 진입을 확인했다.
+**상태:** 완료. Node 24에서 로컬 Yarn PnP 캐시를 이용한 설치와 프로덕션 빌드가 성공했고, 홈·로그인 안내·알 수 없는 경로의 SPA 직접 진입을 확인했다.
 
 ## M2. Google 로그인 및 접근 제어
 

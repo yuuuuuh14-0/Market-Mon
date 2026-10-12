@@ -71,9 +71,12 @@ MVP는 공동 자원 기여·투표를 하는 학급 경제 시뮬레이션과, 
 - Angular 21.2 LTS를 NgModule 기반으로 구성하고 Standalone 컴포넌트를 사용하지 않는다.
 - Angular CLI를 사용한다. 개발 서버는 Angular CLI에 내장된 Vite를 사용하고 프로덕션 번들은 Angular application builder의 esbuild로 만든다.
 - Angular Router와 Less를 사용한다. CSS와 SCSS 파일은 사용하지 않는다.
-- Node.js 24와 Yarn Berry 4.18.1 Plug'n'Play를 사용한다. npm 및 `node_modules` 링크 방식은 사용하지 않는다.
+- Angular 앱은 저장소 루트에 두며 `frontend/` 하위 프로젝트를 만들지 않는다.
+- Node.js 24와 Yarn Berry 4.18.1 Plug'n'Play를 사용한다. Node 24는 프로젝트 요구사항이며 개발자 컴퓨터의 기본 Node 버전을 자동으로 바꾸지 않는다. npm 및 `node_modules` 링크 방식은 사용하지 않는다.
+- Yarn 의존성은 프로젝트 로컬 `.yarn` 디렉터리에 둔다. `.yarn/cache` 아카이브와 `.yarn/unplugged`를 포함한 `.yarn` 전체를 저장소에서 관리한다. `unplugged`에는 플랫폼별로 풀고 빌드한 패키지가 포함될 수 있다.
 - 인증 및 데이터 권한은 Firebase Authentication과 Firestore 보안 규칙으로 보호한다.
-- Firebase 웹 설정은 공개 클라이언트 설정이며 보안 비밀로 취급하지 않는다.
+- Angular 앱은 Firebase 모듈형 JavaScript SDK를 직접 사용하며 AngularFire는 사용하지 않는다.
+- 로컬 개발과 배포는 기존 Firebase 프로젝트 `market-mon-51ee9`를 함께 사용한다. 웹 앱 설정은 공개 클라이언트 설정이며 보안 비밀로 취급하지 않는다.
 - Firestore 데이터 지역은 서울(`asia-northeast3`)을 사용한다.
 - Cloud Functions는 사용하지 않는다. 교사 클라이언트가 Firestore 트랜잭션으로 라운드를 정산한다. 결과 정산 쓰기는 보안 규칙으로 교사에게만 허용하며, 정산은 신뢰된 교사 클라이언트에 의존한다.
 - Cloud Functions를 배포하려면 Blaze 요금제와 결제 계정 연결이 필요하므로 현재 MVP에는 포함하지 않는다. [Firebase Functions 배포 안내](https://firebase.google.com/docs/functions/get-started)
