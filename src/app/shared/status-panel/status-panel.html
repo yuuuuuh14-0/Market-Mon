@@ -1,0 +1,13 @@
+<section
+  class="status-panel"
+  [class.status-panel--error]="state === 'error'"
+  [attr.role]="state === 'error' ? 'alert' : 'status'"
+  [attr.aria-live]="state === 'error' ? 'assertive' : 'polite'"
+>
+  <span class="status-icon" aria-hidden="true">
+    <span *ngIf="state === 'loading'; else errorMark" class="spinner"></span>
+    <ng-template #errorMark>!</ng-template>
+  </span>
+  <h2>{{ title }}</h2>
+  <p>{{ message }}</p>
+</section>

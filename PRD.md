@@ -68,9 +68,10 @@ MVP는 공동 자원 기여·투표를 하는 학급 경제 시뮬레이션과, 
 ## 5. 비기능 요구사항과 기술 제약
 
 - CSR(Client-Side Rendering)만 사용하며 SSR은 사용하지 않는다.
-- Angular는 NgModule 기반으로 구성하고 Standalone 컴포넌트를 사용하지 않는다.
-- Angular Routing, Less, Vite를 사용한다. CSS와 SCSS는 사용하지 않는다.
-- 패키지 관리는 Yarn Berry 4.18.1 Plug'n'Play로 한다. npm 및 `node_modules` 링크 방식을 사용하지 않는다.
+- Angular 21.2 LTS를 NgModule 기반으로 구성하고 Standalone 컴포넌트를 사용하지 않는다.
+- Angular CLI를 사용한다. 개발 서버는 Angular CLI에 내장된 Vite를 사용하고 프로덕션 번들은 Angular application builder의 esbuild로 만든다.
+- Angular Router와 Less를 사용한다. CSS와 SCSS 파일은 사용하지 않는다.
+- Node.js 24와 Yarn Berry 4.18.1 Plug'n'Play를 사용한다. npm 및 `node_modules` 링크 방식은 사용하지 않는다.
 - 인증 및 데이터 권한은 Firebase Authentication과 Firestore 보안 규칙으로 보호한다.
 - Firebase 웹 설정은 공개 클라이언트 설정이며 보안 비밀로 취급하지 않는다.
 - Firestore 데이터 지역은 서울(`asia-northeast3`)을 사용한다.
@@ -85,6 +86,6 @@ MVP는 공동 자원 기여·투표를 하는 학급 경제 시뮬레이션과, 
 - 세션 지급 Mon이 학급 잔액에 누적되며, 키오스크 혜택 모금액과 시뮬레이션 공동 기금이 분리된다.
 - 개인 혜택 교환 시 Mon 차감과 쿠폰 발급이 함께 이뤄지고, 공동 혜택 목표 달성 시 대상 학급 전체에 혜택이 열린다.
 - Firestore 보안 규칙이 개인 기여·잔액·교환 내역과 공개 투표·공동 모금 진행도의 읽기 권한을 구분하고, 교사만 정산 결과 및 쿠폰 사용 상태를 변경할 수 있다.
-- CSR, NgModule, Angular Routing, Less, Vite, Yarn Berry PnP 및 Firebase Hosting 제약을 준수한다.
+- CSR, NgModule, Angular Router, Less, Angular CLI Vite 개발 서버·esbuild 프로덕션 빌드, Node 24, Yarn Berry PnP 및 Firebase Hosting 제약을 준수한다.
 - 지원 기기·브라우저와 접근성·규모·갱신 목표를 충족한다.
 

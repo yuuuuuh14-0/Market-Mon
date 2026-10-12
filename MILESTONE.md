@@ -21,11 +21,15 @@
 
 - Yarn Berry Plug'n'Play로 의존성을 설치하고 실행한다.
 - Angular를 NgModule 기반으로 구성하고 Standalone을 사용하지 않는다.
-- CSR, Angular Routing, Less, Vite 구성을 마련한다.
+- Node.js 24와 Angular 21.2 LTS를 고정한다.
+- CSR, Angular Routing, Less 구성을 마련한다. Angular CLI의 Vite 개발 서버와 esbuild 프로덕션 빌더를 사용한다.
 - Firebase 프로젝트 연결 설정을 개발 및 배포 환경에서 관리한다.
-- 기본 화면과 라우트, 공통 오류·로딩 처리 기반을 마련한다.
+- 한국어 랜딩·로그인 안내·404 화면과 공통 레이아웃을 마련한다.
+- Firebase JS SDK 초기화를 준비하되 Google 로그인은 M2에서 연결한다.
 
 **완료 기준:** 애플리케이션이 로컬에서 빌드·실행되며, 라우트 이동이 동작한다. SSR, Standalone, CSS·SCSS, npm 의존성 설치, `node_modules` 링크 방식을 사용하지 않는다.
+
+**상태:** 완료. Node 24에서 Yarn PnP 설치 후 프로덕션 빌드가 성공했고, 홈·로그인 안내·알 수 없는 경로의 SPA 직접 진입을 확인했다.
 
 ## M2. Google 로그인 및 접근 제어
 

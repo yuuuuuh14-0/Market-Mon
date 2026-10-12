@@ -1,0 +1,52 @@
+:root {
+  color-scheme: light;
+  --paper: #f8f5ee;
+  --card: #fffdf8;
+  --ink: #342f28;
+  --muted: #756d61;
+  --line: #e9e2d6;
+  --terracotta: #b95b40;
+  --terracotta-dark: #974833;
+  --olive: #65754f;
+  font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  background: var(--paper);
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+button,
+a {
+  font: inherit;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid #345b9b;
+  outline-offset: 4px;
+}
+
+::selection {
+  background: #ead1a5;
+  color: #342f28;
+}

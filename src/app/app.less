@@ -1,0 +1,144 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.site-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-header {
+  width: min(100% - 48px, 1184px);
+  height: 88px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(54, 47, 38, 0.09);
+}
+
+.brand,
+.footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.brand-mark {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  background: var(--terracotta);
+  color: #fffaf1;
+  font-family: Georgia, serif;
+  font-size: 22px;
+  font-weight: 700;
+  transform: rotate(-5deg);
+}
+
+.brand-name {
+  font-size: 19px;
+  font-weight: 750;
+  letter-spacing: -0.06em;
+
+  span {
+    color: var(--terracotta);
+  }
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.nav-link {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  color: var(--ink);
+}
+
+.nav-cta {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 17px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color 160ms ease, border-color 160ms ease;
+
+  &:hover {
+    border-color: var(--ink);
+    background: #fffaf2;
+  }
+}
+
+main {
+  flex: 1;
+}
+
+.site-footer {
+  width: min(100% - 48px, 1184px);
+  min-height: 82px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-top: 1px solid rgba(54, 47, 38, 0.09);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.footer-brand {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 750;
+}
+
+@media (max-width: 640px) {
+  .site-header,
+  .site-footer {
+    width: min(100% - 36px, 1184px);
+  }
+
+  .site-header {
+    height: 72px;
+  }
+
+  .header-nav {
+    gap: 14px;
+  }
+
+  .nav-link {
+    display: none;
+  }
+
+  .site-footer {
+    min-height: 100px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 18px 0;
+  }
+
+  .site-footer > span:nth-child(2) {
+    order: 3;
+    width: 100%;
+  }
+}

@@ -3,11 +3,7 @@ package-lock.json
 npm-shrinkwrap.json
 npm-debug.log*
 
-# Yarn Berry: keep .yarnrc.yml, releases, plugins, patches, and PnP files tracked
-.yarn/cache/
-.yarn/unplugged/
-.yarn/build-state.yml
-.yarn/install-state.gz
+# Yarn Berry files, including the local dependency cache, are tracked.
 
 # Angular build output and cache
 /dist/
@@ -25,7 +21,6 @@ ui-debug.log
 .env.*
 !.env.example
 src/environments/firebase.config.local.ts
-src/environments/firebase.config.ts
 
 # Editor and operating-system files
 .DS_Store
