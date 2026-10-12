@@ -1,7 +1,8 @@
 {
   "version": 1,
   "cli": {
-    "packageManager": "yarn"
+    "packageManager": "yarn",
+    "analytics": "62d22022-33f6-4d38-b6f0-42bee24ee655"
   },
   "newProjectRoot": "projects",
   "projects": {
