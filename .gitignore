@@ -1,0 +1,36 @@
+# npm artifacts (this project uses Yarn Berry)
+package-lock.json
+npm-shrinkwrap.json
+npm-debug.log*
+
+# Yarn Berry: keep .yarnrc.yml, releases, plugins, patches, and PnP files tracked
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# Angular build output and cache
+/dist/
+/.angular/
+/coverage/
+
+# Firebase local/emulator state and logs
+/.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# Local environment files and secrets
+.env
+.env.*
+!.env.example
+src/environments/firebase.config.local.ts
+src/environments/firebase.config.ts
+
+# Editor and operating-system files
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
