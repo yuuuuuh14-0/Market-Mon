@@ -25,14 +25,16 @@
 
 ## 로컬 개발
 
-Node.js 24를 설치하고 현재 터미널에서 활성화한 뒤 저장소 루트에서 실행합니다. `.nvmrc`는 버전을 표시하지만 시스템 기본 Node 버전을 자동으로 바꾸지는 않습니다.
+Firebase Hosting 배포 없이 Angular 개발 서버에서 앱을 미리 볼 수 있습니다. 저장소를 복제한 뒤 Node.js 24를 설치하고 현재 터미널에서 활성화하세요. `.nvmrc`는 버전을 표시하지만 시스템 기본 Node 버전을 자동으로 바꾸지는 않습니다. `node -v`가 `v24.x`인지 확인한 다음 실행합니다.
 
 ```sh
-yarn install --immutable
-yarn start
+git clone https://github.com/yuuuuuh14-0/Market-Mon.git
+cd Market-Mon
+node .yarn/releases/yarn-4.18.1.cjs install --immutable
+node .yarn/releases/yarn-4.18.1.cjs start
 ```
 
-프로덕션 빌드는 `yarn build`로 만듭니다. 개발 서버는 Angular CLI가 제공하는 Vite 기반 서버이며, 프로덕션 빌드는 Angular esbuild builder를 사용합니다.
+개발 서버가 시작되면 <http://localhost:4200>에서 확인하고, 종료할 때는 터미널에서 `Ctrl+C`를 누릅니다. 위 명령은 저장소에 고정된 Yarn 버전을 직접 실행합니다. 프로덕션 빌드는 `node .yarn/releases/yarn-4.18.1.cjs build`로 만듭니다. 개발 서버는 Angular CLI가 제공하는 Vite 기반 서버이며, 프로덕션 빌드는 Angular esbuild builder를 사용합니다.
 
 로컬 개발과 배포는 Firebase 프로젝트 `market-mon-51ee9`를 함께 사용합니다. 앱은 Firebase 모듈형 JavaScript SDK를 직접 초기화하며, 웹 설정은 `src/environments/firebase.config.ts`에서 관리합니다. 이 설정은 클라이언트에 공개되는 값이며 비밀 키가 아닙니다. Firebase Admin SDK 서비스 계정 키나 기타 비밀 정보는 저장소에 넣지 마세요.
 
