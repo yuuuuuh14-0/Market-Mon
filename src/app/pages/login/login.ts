@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../../core/auth';
 
 @Component({
   selector: 'app-login-page',
@@ -6,4 +7,6 @@ import { Component } from '@angular/core';
   styleUrl: './login.less',
   standalone: false,
 })
-export class LoginPage {}
+export class LoginPage {
+  constructor(readonly auth: AuthService) {}
+}

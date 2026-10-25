@@ -38,6 +38,16 @@ node .yarn/releases/yarn-4.18.1.cjs start
 
 로컬 개발과 배포는 Firebase 프로젝트 `market-mon-51ee9`를 함께 사용합니다. 앱은 Firebase 모듈형 JavaScript SDK를 직접 초기화하며, 웹 설정은 `src/environments/firebase.config.ts`에서 관리합니다. 이 설정은 클라이언트에 공개되는 값이며 비밀 키가 아닙니다. Firebase Admin SDK 서비스 계정 키나 기타 비밀 정보는 저장소에 넣지 마세요.
 
+### Firebase 로그인 설정
+
+로그인 기능을 사용하려면 Firebase Console의 `market-mon-51ee9` 프로젝트에서 다음을 설정하세요.
+
+1. **Authentication → Sign-in method**에서 Google 제공자를 활성화합니다. 이메일/비밀번호 제공자는 사용하지 않습니다.
+2. **Authentication → Settings → Authorized domains**에 `localhost`가 있는지 확인합니다. 다른 개발 주소를 사용한다면 해당 호스트도 추가합니다.
+3. **Firestore Database → Rules**에서 저장소의 [`firestore.rules`](firestore.rules) 내용을 적용합니다. 현재 규칙은 본인 `users/{uid}` 프로필만 허용하고 다른 데이터 경로는 거부합니다.
+
+로그인은 Google 리다이렉트 방식입니다. 로그인 후 홈에서 계정과 로그아웃을 확인하고 `/profile`에서 기본 화면 모드를 선택할 수 있습니다. 이 모드는 화면 기본값일 뿐 학급 권한을 부여하지 않습니다. 프로필에는 표시 이름·사진 URL·모드만 저장하며 이메일은 Firestore에 저장하지 않습니다.
+
 ## 프로젝트 문서
 
 - [제품 요구사항 (PRD)](PRD.md)
@@ -46,4 +56,4 @@ node .yarn/releases/yarn-4.18.1.cjs start
 
 ## 개발 상태
 
-M1 애플리케이션 기반 구성을 완료했습니다. 홈·로그인 안내·404 경로와 Firebase 앱 초기화가 준비되어 있습니다. Google 로그인은 M2에서, 학급 시뮬레이션과 보상 키오스크는 M3에서 구현합니다. Firebase Hosting 배포 설정은 M5 범위입니다.
+M1 애플리케이션 기반 구성과 M2 Google 로그인·계정 프로필 구현을 완료했습니다. 실제 OAuth 흐름을 사용하려면 위의 Firebase Console 설정이 필요합니다. 학급 시뮬레이션과 보상 키오스크는 M3에서 구현하며 Firebase Hosting 배포 설정은 M5 범위입니다.

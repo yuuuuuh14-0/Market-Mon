@@ -7,9 +7,23 @@
 
     <nav class="header-nav" aria-label="주요 메뉴">
       <a class="nav-link" routerLink="/" fragment="features">서비스 소개</a>
-      <a class="nav-cta" routerLink="/login">로그인 <span aria-hidden="true">↗</span></a>
+      @if (auth.status() === 'loading') {
+        <span class="nav-status" aria-live="polite">계정 확인 중…</span>
+      } @else if (auth.user(); as user) {
+        <a class="nav-link" routerLink="/profile">{{ profiles.profile()?.displayName || user.displayName || '내 계정' }}</a>
+        <button class="nav-cta" type="button" [disabled]="auth.isBusy()" (click)="auth.logOut()">로그아웃</button>
+      } @else {
+        <a class="nav-cta" routerLink="/login">로그인 <span aria-hidden="true">↗</span></a>
+      }
     </nav>
   </header>
+
+  @if (auth.error()) {
+    <div class="global-message" role="alert">
+      <span>{{ auth.error() }}</span>
+      <button type="button" (click)="auth.clearError()" aria-label="알림 닫기">닫기</button>
+    </div>
+  }
 
   <main id="main-content">
     <router-outlet></router-outlet>

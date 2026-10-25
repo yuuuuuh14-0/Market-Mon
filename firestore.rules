@@ -1,0 +1,34 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwnUser(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function hasValidProfile() {
+      return request.resource.data.keys().hasAll(['displayName', 'photoURL', 'accountMode'])
+        && request.resource.data.keys().hasOnly(['displayName', 'photoURL', 'accountMode'])
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() > 0
+        && request.resource.data.displayName.size() <= 120
+        && (request.resource.data.photoURL == null || request.resource.data.photoURL is string)
+        && (request.resource.data.accountMode == null
+          || request.resource.data.accountMode in ['teacher', 'student']);
+    }
+
+    match /users/{uid} {
+      allow get: if isOwnUser(uid);
+      allow list: if false;
+      allow create, update: if isOwnUser(uid) && hasValidProfile();
+      allow delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -7,7 +7,11 @@
       선생님이 준비한 특별한 혜택도 만나보세요.
     </p>
     <div class="hero-actions">
-      <a class="primary-button" routerLink="/login">우리 반으로 들어가기 <span aria-hidden="true">→</span></a>
+      @if (auth.user()) {
+        <a class="primary-button" routerLink="/profile">내 프로필 보기 <span aria-hidden="true">→</span></a>
+      } @else {
+        <a class="primary-button" routerLink="/login">우리 반으로 들어가기 <span aria-hidden="true">→</span></a>
+      }
       <a class="text-button" routerLink="/" fragment="features">Market Mon 알아보기</a>
     </div>
     <div class="hero-note">
