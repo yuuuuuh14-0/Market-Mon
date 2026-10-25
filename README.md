@@ -1,59 +1,65 @@
-# Market Mon
+# Market-Mon
 
-교실에서 가상 화폐 **Mon**을 사용해 협력과 경제 활동을 경험하는 한국어 웹 애플리케이션입니다. 교사는 학급과 세션을 운영하고, 학생은 공동 목표를 위한 기여·투표에 참여하거나 Mon으로 학급 혜택을 이용합니다.
+**Market-Mon은 함께 모으고, 함께 결정하며, 교실 안에서 성장하는 학급 경제 놀이터입니다.** 학생은 수업 활동으로 Mon과 능력치를 모으고, 저축과 직업 성장에 참여합니다. 학급은 공동 목표를 함께 이루고, 교사는 교실 활동과 혜택을 운영합니다.
 
-## 주요 기능
+## 제품 방향
 
-- **학급 경제 시뮬레이션:** 학생들이 공동 자원에 기여하고 투표로 사용 방식을 결정합니다.
-- **보상 키오스크:** 교사가 개인 혜택과 학급 공동 혜택을 정합니다. 학생은 개인 혜택을 쿠폰으로 교환하거나 공동 혜택 모금에 참여할 수 있습니다.
-- **학급 운영:** Google 계정으로 로그인하고, 학급·세션 가입 요청과 승인은 교사가 관리합니다.
+- **함께 결정:** Mon을 기여하고 투표해 공동 자원의 사용을 정하는 시뮬레이션
+- **나의 성장:** 활동·저축·직업·능력치를 통해 개인의 성장을 기록
+- **우리 반 키오스크:** 교사가 정한 혜택과 학급 보스를 통해 함께 보상을 경험
+- **교실 공개판:** 전자칠판에는 공동 진행과 수업 도구를, 개인 기기에는 본인 정보만 표시
 
-> 시뮬레이션과 보상 기능은 제품 계획이며 아직 구현되지 않았습니다.
+Market-Mon은 교실 경제를 학생의 일상적인 선택으로 경험하도록 돕습니다. 개인별 순위나 공개 잔액은 제공하지 않습니다.
 
 ## 기술 구성
 
-| 영역 | 선택 및 제약 |
+| 구분 | 구성 |
 | --- | --- |
-| 프런트엔드 | Angular 21.2 LTS, NgModule 기반 구성; Standalone 컴포넌트는 사용하지 않음 |
-| 렌더링·빌드 | CSR; Angular CLI Vite 개발 서버와 esbuild 프로덕션 번들러; SSR은 사용하지 않음 |
-| 스타일·라우팅 | Less, Angular Routing |
-| 인증·데이터 | Firebase Authentication, Cloud Firestore |
-| 배포 | Firebase Hosting — `market-mon-51ee9.firebaseapp.com` |
-| 런타임·패키지 관리 | Node.js 24, Yarn Berry 4.18.1 Plug’n’Play; npm 및 `node_modules` 링크 방식은 사용하지 않음 |
+| 앱 | 저장소 루트의 Angular 21.2 LTS, NgModule, CSR |
+| 화면 | Angular Router, Less, Angular CLI Vite 개발 서버, esbuild 프로덕션 빌드 |
+| Firebase | Authentication·Firestore 사용, 활동 사진용 Storage 계획; 모듈형 JavaScript SDK 직접 사용 |
+| 런타임·패키지 | Node.js 24, Yarn Berry 4.18.1 Plug'n'Play |
+| 저장소 내 의존성 | `.yarn` 전체 추적. `.yarn/cache` 압축 아카이브 및 플랫폼별 `.yarn/unplugged` 포함 |
 
-앱은 저장소 루트에서 관리하며 `frontend/` 하위 프로젝트는 없습니다. Yarn 버전은 `package.json`의 `packageManager`와 `.yarnrc.yml`의 `yarnPath`에 고정되어 있습니다. 의존성 아카이브와 설치 산출물을 포함한 `.yarn` 디렉터리 전체를 저장소에서 관리합니다. `.yarn/unplugged`에는 플랫폼별 빌드 파일이 들어갈 수 있습니다.
+`frontend/`, Standalone 컴포넌트, SSR, npm 설치, `node_modules` 링크 방식은 사용하지 않습니다. `.nvmrc`는 Node 24를 표시하지만 시스템 기본 버전을 자동 변경하지 않습니다.
 
-## 로컬 개발
+## 실행
 
-Firebase Hosting 배포 없이 Angular 개발 서버에서 앱을 미리 볼 수 있습니다. 저장소를 복제한 뒤 Node.js 24를 설치하고 현재 터미널에서 활성화하세요. `.nvmrc`는 버전을 표시하지만 시스템 기본 Node 버전을 자동으로 바꾸지는 않습니다. `node -v`가 `v24.x`인지 확인한 다음 실행합니다.
+Node.js 24를 설치·활성화하고 버전을 확인한 다음 저장소 루트에서 실행합니다.
 
 ```sh
-git clone https://github.com/yuuuuuh14-0/Market-Mon.git
-cd Market-Mon
+node -v
 node .yarn/releases/yarn-4.18.1.cjs install --immutable
 node .yarn/releases/yarn-4.18.1.cjs start
 ```
 
-개발 서버가 시작되면 <http://localhost:4200>에서 확인하고, 종료할 때는 터미널에서 `Ctrl+C`를 누릅니다. 위 명령은 저장소에 고정된 Yarn 버전을 직접 실행합니다. 프로덕션 빌드는 `node .yarn/releases/yarn-4.18.1.cjs build`로 만듭니다. 개발 서버는 Angular CLI가 제공하는 Vite 기반 서버이며, 프로덕션 빌드는 Angular esbuild builder를 사용합니다.
+개발 서버는 <http://localhost:4200>에서 확인합니다. 종료는 `Ctrl+C`, 프로덕션 빌드는 다음 명령을 사용합니다.
 
-로컬 개발과 배포는 Firebase 프로젝트 `market-mon-51ee9`를 함께 사용합니다. 앱은 Firebase 모듈형 JavaScript SDK를 직접 초기화하며, 웹 설정은 `src/environments/firebase.config.ts`에서 관리합니다. 이 설정은 클라이언트에 공개되는 값이며 비밀 키가 아닙니다. Firebase Admin SDK 서비스 계정 키나 기타 비밀 정보는 저장소에 넣지 마세요.
+```sh
+node .yarn/releases/yarn-4.18.1.cjs build
+```
 
-### Firebase 로그인 설정
+제목·본문 글꼴 시안은 개발 서버에서 <http://localhost:4200/design-preview>를 열어 비교할 수 있습니다. 이 화면만 비교용 웹폰트를 CDN에서 불러옵니다.
 
-로그인 기능을 사용하려면 Firebase Console의 `market-mon-51ee9` 프로젝트에서 다음을 설정하세요.
+로컬 개발은 Firebase 프로젝트 `market-mon-51ee9`의 공개 웹 설정을 사용합니다. Firebase 웹 설정은 클라이언트에 전달되는 공개 값이며 비밀 키가 아닙니다. 서비스 계정 키나 기타 비밀 정보를 저장소에 추가하지 마세요.
 
-1. **Authentication → Sign-in method**에서 Google 제공자를 활성화합니다. 이메일/비밀번호 제공자는 사용하지 않습니다.
-2. **Authentication → Settings → Authorized domains**에 `localhost`가 있는지 확인합니다. 다른 개발 주소를 사용한다면 해당 호스트도 추가합니다.
-3. **Firestore Database → Rules**에서 저장소의 [`firestore.rules`](firestore.rules) 내용을 적용합니다. 현재 규칙은 본인 `users/{uid}` 프로필만 허용하고 다른 데이터 경로는 거부합니다.
+## Firebase 로그인 설정
 
-로그인은 Google 리다이렉트 방식입니다. 로그인 후 홈에서 계정과 로그아웃을 확인하고 `/profile`에서 기본 화면 모드를 선택할 수 있습니다. 이 모드는 화면 기본값일 뿐 학급 권한을 부여하지 않습니다. 프로필에는 표시 이름·사진 URL·모드만 저장하며 이메일은 Firestore에 저장하지 않습니다.
+Firebase Console에서 아래 설정이 필요합니다.
 
-## 프로젝트 문서
+1. Authentication의 로그인 제공자에서 Google을 활성화합니다.
+2. Authorized domains에 `localhost` 및 사용할 개발 도메인을 추가합니다.
+3. Firestore Rules에 저장소의 [`firestore.rules`](firestore.rules)를 적용합니다.
 
-- [제품 요구사항 (PRD)](PRD.md)
-- [시뮬레이션 규칙 및 Firestore 설계](SIMULATION-SPEC.md)
+현재 Google 로그인·로그아웃·프로필 모드가 구현되어 있습니다. 계정 모드는 화면 기본값이며 학급별 권한은 별도의 멤버십 승인으로 결정됩니다. 학생 PIN 로그인과 Cloud Functions는 비용·운영 검토 전까지 계획 범위에서 제외합니다.
+
+## 현재 진행 상태
+
+Angular 기반과 Google 인증·프로필이 준비되어 있고, Market-Mon 디자인과 소개 페이지 개편을 진행하고 있습니다. 학급 생성·QR 가입 승인, 개인 경제, 활동, 직업 성장, 보스, 키오스크는 마일스톤에 따라 구현할 예정입니다. 기능 계획이 완료된 상태와 실제 앱에서 동작하는 기능을 구분해 관리합니다.
+
+## 문서
+
+- [제품 요구사항](PRD.md)
+- [공동 시뮬레이션 및 Firestore 설계](SIMULATION-SPEC.md)
+- [학급 경제·성장 명세](CLASSROOM-ECONOMY-SPEC.md)
 - [개발 마일스톤](MILESTONE.md)
-
-## 개발 상태
-
-M1 애플리케이션 기반 구성과 M2 Google 로그인·계정 프로필 구현을 완료했습니다. 실제 OAuth 흐름을 사용하려면 위의 Firebase Console 설정이 필요합니다. 학급 시뮬레이션과 보상 키오스크는 M3에서 구현하며 Firebase Hosting 배포 설정은 M5 범위입니다.

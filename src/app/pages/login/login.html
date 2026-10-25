@@ -5,7 +5,15 @@
     <h1 id="login-title">Google 계정으로<br>시작해요.</h1>
     <p class="message-copy">로그인하면 우리 반 활동에 참여하고 계정 모드를 설정할 수 있어요. 계정 이메일은 앱 프로필에 저장하지 않습니다.</p>
     <button class="google-button" type="button" [disabled]="auth.isBusy() || auth.status() === 'loading'" (click)="auth.signInWithGoogle()">
-      @if (auth.isBusy()) { Google 로그인으로 이동 중… } @else { <span class="google-mark" aria-hidden="true">G</span> Google로 로그인 }
+      @if (auth.isBusy()) { Google 로그인으로 이동 중… } @else {
+        <svg class="google-mark" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.1 5.1 0 0 1-2.2 3.31v2.77h3.57c2.08-1.92 3.27-4.75 3.27-8.09Z" />
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.99.66-2.25 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.15v2.84A11 11 0 0 0 12 23Z" />
+          <path fill="#FBBC05" d="M5.84 14.1a6.6 6.6 0 0 1 0-4.2V7.06H2.15a11 11 0 0 0 0 9.88l3.69-2.84Z" />
+          <path fill="#EA4335" d="M12 4.5c1.62 0 3.07 .56 4.21 1.64l3.15-3.15A10.55 10.55 0 0 0 12 0 11 11 0 0 0 2.15 7.06l3.69 2.84C6.71 7.3 9.14 4.5 12 4.5Z" />
+        </svg>
+        Google로 로그인
+      }
     </button>
     @if (auth.error()) { <p class="login-error" role="alert">{{ auth.error() }}</p> }
     <a class="back-link" routerLink="/">홈으로 돌아가기 <span aria-hidden="true">→</span></a>

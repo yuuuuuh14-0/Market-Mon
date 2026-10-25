@@ -1,95 +1,10 @@
-.message-page {
-  min-height: min(70vh, 680px);
-  display: grid;
-  place-items: center;
-  padding: 48px 20px;
-}
-
-.message-card {
-  width: min(100%, 490px);
-  padding: 54px 44px;
-  border: 1px solid var(--line);
-  border-radius: 25px;
-  background: #fffdf8;
-  box-shadow: 0 20px 55px rgba(66, 52, 33, 0.08);
-  text-align: center;
-}
-
-.message-symbol {
-  width: 54px;
-  height: 54px;
-  margin: 0 auto 24px;
-  display: grid;
-  place-items: center;
-  border-radius: 18px;
-  background: #f1e4c7;
-  color: var(--terracotta);
-  font-family: Georgia, serif;
-  font-size: 30px;
-  font-weight: 700;
-}
-
-.message-eyebrow {
-  margin: 0 0 10px;
-  color: var(--terracotta-dark);
-  font-size: 11px;
-  font-weight: 750;
-  letter-spacing: 0.1em;
-}
-
-h1 {
-  margin: 0;
-  color: var(--ink);
-  font-size: clamp(25px, 6vw, 32px);
-  letter-spacing: -0.065em;
-}
-
-.message-copy {
-  margin: 16px 0 25px;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.8;
-  word-break: keep-all;
-}
-
-.back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--terracotta-dark);
-  font-size: 13px;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.back-link:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-
-.google-button {
-  width: 100%;
-  min-height: 52px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  border: 1px solid var(--line);
-  border-radius: 13px;
-  background: #fff;
-  color: var(--ink);
-  font: inherit;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.google-button:disabled { opacity: 0.6; cursor: wait; }
-.google-mark { color: #4285f4; font-size: 19px; font-weight: 800; }
-.login-error { margin: 16px 0 0; color: #a83f32; font-size: 12px; line-height: 1.6; }
-
-@media (max-width: 480px) {
-  .message-card {
-    padding: 42px 25px;
-  }
-}
+.message-page { min-height: min(78vh,850px); display: grid; place-items: center; padding: 54px 20px; background: radial-gradient(ellipse at 50% 35%,rgba(242,193,78,.1),transparent 45%); }
+.message-card { width: min(100%,510px); padding: clamp(31px,6vw,55px); border: 1px solid var(--line); border-radius: 26px; background: linear-gradient(145deg,rgba(242,193,78,.07),transparent 45%),var(--card); box-shadow: 0 28px 80px rgba(0,0,0,.22); text-align: center; }
+.message-symbol { width: 58px; height: 58px; margin: 0 auto 23px; display: grid; place-items: center; border-radius: 18px; background: linear-gradient(140deg,#f6d879,var(--gold)); color: #251e12; font-size: 29px; font-weight: 850; letter-spacing: -.1em; }
+.message-eyebrow { margin: 0 0 11px; color: var(--gold); font-size: 10px; font-weight: 780; letter-spacing: .12em; }
+h1 { margin: 0; color: var(--ink); font-size: clamp(28px,7vw,39px); font-weight: 820; letter-spacing: -.07em; line-height: 1.2; }
+.message-copy { margin: 17px 0 26px; color: var(--muted); font-size: 12px; line-height: 1.9; word-break: keep-all; }
+.google-button { width: 100%; min-height: 53px; display: inline-flex; justify-content: center; align-items: center; gap: 11px; border: 1px solid rgba(242,193,78,.42); border-radius: 13px; background: linear-gradient(115deg,#f5d16c,#f2c14e 55%,#efa079); color: #211b12; font: inherit; font-size: 13px; font-weight: 780; cursor: pointer; transition: filter 160ms ease,transform 160ms ease; }
+.google-button:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.06); }.google-button:disabled { opacity: .6; cursor: wait; }.google-mark { width: 18px; height: 18px; flex: 0 0 18px; }
+.login-error { margin: 15px 0 0; padding: 11px; border: 1px solid rgba(240,125,104,.3); border-radius: 10px; background: rgba(240,125,104,.08); color: #ffae9e; font-size: 11px; line-height: 1.6; }
+.back-link { margin-top: 24px; display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 11px; font-weight: 700; text-decoration: none; }.back-link:hover { color: var(--gold); }

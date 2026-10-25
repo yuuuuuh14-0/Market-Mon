@@ -1,13 +1,18 @@
 :root {
-  color-scheme: light;
-  --paper: #f8f5ee;
-  --card: #fffdf8;
-  --ink: #342f28;
-  --muted: #756d61;
-  --line: #e9e2d6;
-  --terracotta: #b95b40;
-  --terracotta-dark: #974833;
-  --olive: #65754f;
+  color-scheme: dark;
+  --paper: #191716;
+  --surface: #201d1b;
+  --card: #242120;
+  --card-raised: #2b2724;
+  --ink: #f7f0e5;
+  --muted: #b0a69a;
+  --subtle: #80776e;
+  --line: rgba(255, 242, 219, 0.13);
+  --gold: #f2c14e;
+  --coral: #f07d68;
+  --mint: #70c9b7;
+  --lilac: #aa91d4;
+  --focus: #f4d36f;
   font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -17,14 +22,13 @@
 
 *,
 *::before,
-*::after {
-  box-sizing: border-box;
-}
+*::after { box-sizing: border-box; }
 
 html {
   min-width: 320px;
   background: var(--paper);
   scroll-behavior: smooth;
+  scrollbar-color: #65523a var(--paper);
 }
 
 body {
@@ -36,17 +40,29 @@ body {
 }
 
 button,
-a {
-  font: inherit;
-}
+a { font: inherit; }
 
 a:focus-visible,
-button:focus-visible {
-  outline: 3px solid #345b9b;
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--focus);
   outline-offset: 4px;
 }
 
 ::selection {
-  background: #ead1a5;
-  color: #342f28;
+  background: rgba(242, 193, 78, 0.42);
+  color: #fff9ed;
+}
+
+@import "app/pages/home/home.less";
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

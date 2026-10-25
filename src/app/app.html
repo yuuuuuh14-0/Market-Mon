@@ -1,19 +1,26 @@
 <div class="site-shell">
+  <div class="reading-progress" aria-hidden="true" [style.transform]="'scaleX(' + scrollProgress() + ')'" ></div>
   <header class="site-header">
     <a class="brand" routerLink="/" aria-label="Market Mon 홈">
-      <span class="brand-mark" aria-hidden="true">M</span>
-      <span class="brand-name">Market <span>Mon</span></span>
+      <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+        <path d="M8 20 24 8l16 12v20H8V20Z" />
+        <path d="M5 20h38L24 6 5 20Z" />
+        <path d="M13 25h22v15H13zM19 25v15m10-15v15" />
+        <path d="M18 31h4m4 0h4" />
+      </svg>
+      <span class="brand-name">Market<span>Mon</span></span>
     </a>
 
     <nav class="header-nav" aria-label="주요 메뉴">
-      <a class="nav-link" routerLink="/" fragment="features">서비스 소개</a>
+      <a class="nav-link" routerLink="/" fragment="mon-flow">제품 소개</a>
+      <a class="nav-link" routerLink="/" fragment="careers">직업 성장</a>
       @if (auth.status() === 'loading') {
         <span class="nav-status" aria-live="polite">계정 확인 중…</span>
       } @else if (auth.user(); as user) {
         <a class="nav-link" routerLink="/profile">{{ profiles.profile()?.displayName || user.displayName || '내 계정' }}</a>
         <button class="nav-cta" type="button" [disabled]="auth.isBusy()" (click)="auth.logOut()">로그아웃</button>
       } @else {
-        <a class="nav-cta" routerLink="/login">로그인 <span aria-hidden="true">↗</span></a>
+        <a class="nav-cta" routerLink="/login">우리 반 시작하기 <span aria-hidden="true">↗</span></a>
       }
     </nav>
   </header>
@@ -29,9 +36,11 @@
     <router-outlet></router-outlet>
   </main>
 
-  <footer class="site-footer">
-    <a class="footer-brand" routerLink="/">Market Mon</a>
-    <span>함께 모으고, 함께 결정하는 우리 반 경제</span>
-    <span>© {{ currentYear }} Market Mon</span>
-  </footer>
+  @if (router.url === '/') {
+    <footer class="site-footer">
+      <a class="footer-brand" routerLink="/">Market-Mon</a>
+      <span>함께 모으고, 함께 결정하며, 교실 안에서 성장해요.</span>
+      <span>© {{ currentYear }} Market-Mon</span>
+    </footer>
+  }
 </div>
