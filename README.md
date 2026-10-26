@@ -15,17 +15,17 @@ Market-Mon은 교실 경제를 학생의 일상적인 선택으로 경험하도�
 
 | 구분 | 구성 |
 | --- | --- |
-| 앱 | 저장소 루트의 Angular 21.2 LTS, NgModule, CSR |
+| 앱 | 저장소 루트의 Angular 18.2, NgModule, CSR, Zone.js |
 | 화면 | Angular Router, Less, Angular CLI Vite 개발 서버, esbuild 프로덕션 빌드 |
 | Firebase | Authentication·Firestore 사용, 활동 사진용 Storage 계획; 모듈형 JavaScript SDK 직접 사용 |
-| 런타임·패키지 | Node.js 24, Yarn Berry 4.18.1 Plug'n'Play |
+| 런타임·패키지 | Node.js 22, Yarn Berry 4.18.1 Plug'n'Play |
 | 저장소 내 의존성 | `.yarn` 전체 추적. `.yarn/cache` 압축 아카이브 및 플랫폼별 `.yarn/unplugged` 포함 |
 
-`frontend/`, Standalone 컴포넌트, SSR, npm 설치, `node_modules` 링크 방식은 사용하지 않습니다. `.nvmrc`는 Node 24를 표시하지만 시스템 기본 버전을 자동 변경하지 않습니다.
+`frontend/`, Standalone 컴포넌트, SSR, npm 설치, `node_modules` 링크 방식은 사용하지 않습니다. `.nvmrc`는 Node 22를 표시하지만 시스템 기본 버전을 자동 변경하지 않습니다. Angular 18은 공식 지원이 종료된 버전이며, 프로젝트 호환성을 위해 유지합니다.
 
 ## 실행
 
-Node.js 24를 설치·활성화하고 버전을 확인한 다음 저장소 루트에서 실행합니다.
+Node.js 22를 설치·활성화하고 버전을 확인한 다음 저장소 루트에서 실행합니다.
 
 ```sh
 node -v
@@ -39,7 +39,7 @@ node .yarn/releases/yarn-4.18.1.cjs start
 node .yarn/releases/yarn-4.18.1.cjs build
 ```
 
-제목·본문 글꼴 시안은 개발 서버에서 <http://localhost:4200/design-preview>를 열어 비교할 수 있습니다. 이 화면만 비교용 웹폰트를 CDN에서 불러옵니다.
+앱 전체에서 Gmarket Sans를 사용합니다. 개발 서버의 <http://localhost:4200/design-preview>에서 기본 글꼴의 실제 화면 예시를 볼 수 있습니다. 글꼴 파일은 CDN에서 불러오므로 인터넷 연결이 필요하며, 불러오지 못하면 기기 기본 한글 글꼴로 표시됩니다.
 
 로컬 개발은 Firebase 프로젝트 `market-mon-51ee9`의 공개 웹 설정을 사용합니다. Firebase 웹 설정은 클라이언트에 전달되는 공개 값이며 비밀 키가 아닙니다. 서비스 계정 키나 기타 비밀 정보를 저장소에 추가하지 마세요.
 
@@ -55,7 +55,7 @@ Google 로그인·로그아웃·로그인 상태 유지·프로필 모드가 구
 
 ## 현재 진행 상태
 
-M0 제품 규칙, M1 Angular 기반, M2 Google 인증·프로필은 완료했습니다. M2.5 소개 페이지와 디자인 개편은 구현을 마쳤으며, 실제 화면 검토와 최종 글꼴 선택을 진행 중입니다. 다음 구현 단계는 M3 학급 생성·QR 참여 승인입니다. 개인 경제, 활동, 직업 성장, 보스, 키오스크는 이후 마일스톤에서 구현합니다.
+M0 제품 규칙, M1 Angular 기반, M2 Google 인증·프로필은 완료했습니다. M2.5 소개 페이지와 디자인 체계 구현 및 반응형 규칙 점검을 마쳤습니다. 현재 환경에서 Node 22 빌드가 esbuild worker deadlock으로 끝나 원인 확인이 남아 있습니다. 다음 구현 단계는 M3 학급 생성·QR 참여 승인입니다. 개인 경제, 활동, 직업 성장, 보스, 키오스크는 이후 마일스톤에서 구현합니다.
 
 ## 문서
 

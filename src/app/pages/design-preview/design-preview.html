@@ -1,31 +1,16 @@
 <section class="preview-page" aria-labelledby="preview-title">
   <div class="preview-heading">
     <a class="preview-back" routerLink="/">← Market-Mon 홈</a>
-    <p class="eyebrow">DESIGN STUDY · TYPOGRAPHY</p>
-    <h1 id="preview-title">Market-Mon 글꼴<br><span>후보 비교</span></h1>
-    <p>같은 문구와 웜 차콜 화면에서 제목과 본문 인상을 비교해 보세요. 아래 후보를 누르면 큰 미리보기도 바뀝니다.</p>
+    <p class="eyebrow">DESIGN SYSTEM · TYPOGRAPHY</p>
+    <h1 id="preview-title">Market-Mon 기본 글꼴<br><span>{{ fontName }}</span></h1>
+    <p>제목과 본문에 Gmarket Sans를 적용합니다. 이 미리보기에서 실제 화면의 글자 크기와 줄 배치를 확인할 수 있습니다.</p>
   </div>
 
-  <div class="font-options" role="radiogroup" aria-label="글꼴 후보">
-    @for (font of fontOptions; track font.id) {
-      <button class="font-option" type="button" role="radio" [attr.aria-checked]="selectedFont() === font.id" [class.selected]="selectedFont() === font.id" [style.font-family]="font.family" (click)="selectedFont.set(font.id)">
-        <span class="font-option-header"><strong>{{ font.name }}</strong><span>{{ selectedFont() === font.id ? '선택됨' : '미리보기' }}</span></span>
-        <span class="font-sample-title">같이 모으고,<br>내일의 나를 키워요.</span>
-        <span class="font-sample-body">오늘의 선택이 나의 성장으로, 친구와 함께한 시간이 우리 반의 목표로 이어져요.</span>
-        <small>{{ font.description }}</small>
-      </button>
-    }
-  </div>
-
-  @for (font of fontOptions; track font.id) {
-    @if (selectedFont() === font.id) {
-      <article class="large-specimen" [style.font-family]="font.family">
-        <div><span class="specimen-label">선택 미리보기 · {{ font.name }}</span><span class="specimen-count">13 직업 · 4 능력치 · 3 성장 단계</span></div>
-        <h2>우리 반 경제,<br><em>함께 만들어가요.</em></h2>
-        <p>모으고, 저축하고, 결정하는 경험을 교실 안에 담았어요. 선생님은 운영을 돕고, 학생은 서로의 성장을 응원해요.</p>
-        <button class="specimen-cta" type="button">우리 반 시작하기 <span aria-hidden="true">↗</span></button>
-      </article>
-    }
-  }
-  <p class="preview-note">글꼴은 이 비교 화면에 들어왔을 때만 웹 CDN에서 불러옵니다. 비교 화면 외의 페이지에는 글꼴 다운로드를 추가하지 않습니다.</p>
+  <article class="large-specimen">
+    <div><span class="specimen-label">앱 기본 글꼴 · {{ fontName }}</span><span class="specimen-count">13 직업 · 4 능력치 · 3 성장 단계</span></div>
+    <h2>우리 반 경제,<br><em>함께 만들어가요.</em></h2>
+    <p>모으고, 저축하고, 결정하는 경험을 교실 안에 담았어요. 선생님은 운영을 돕고, 학생은 서로의 성장을 응원해요.</p>
+    <button class="specimen-cta" type="button">우리 반 시작하기 <span aria-hidden="true">↗</span></button>
+  </article>
+  <p class="preview-note">Gmarket Sans는 CDN에서 불러옵니다. 인터넷 연결이 없거나 글꼴을 불러오지 못하면 기기의 기본 한글 글꼴을 사용합니다.</p>
 </section>

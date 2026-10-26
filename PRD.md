@@ -60,15 +60,15 @@ Market-Mon은 교사가 운영하는 학급 경제·성장 웹 앱이다. 학생
 - 소개 페이지는 교실 공동 현황 예시, Mon 획득·저축·공동 기여 흐름, 개인 지갑과 학급 공개판, 직업 성장, 교사 운영 순서로 구성하고 FAQ를 하단에 둔다.
 - 히어로는 공동 목표 진행과 학급 단위 예시를 보여준다. 개인 잔액이나 학생 순위는 공개하지 않는다.
 - 직업 13개·능력치 4개·성장 단계 3개는 직업 성장 영역에서 설명한다. 실제 이용자·학급 수로 오인되는 가상 통계는 표시하지 않는다.
-- 로그인 및 프로필 화면도 같은 디자인 체계를 따른다.
+- 로그인 및 프로필 화면도 같은 디자인 체계와 Gmarket Sans를 따른다.
 
 ## 5. 디자인과 기술 제약
 
 - 시각 기준은 웜 차콜 배경 `#191716`, 카드 `#242120`, 골드 `#F2C14E`, 보조 코랄 `#F07D68`, 민트 `#70C9B7`, 라일락 `#AA91D4`다. 섹션과 주요 카드에는 이 색을 활용한 그라데이션을 적극 사용한다.
 - 둥근 카드와 버튼을 사용하고 과한 그림자는 줄인다. Market-Mon의 작은 교실 장터/칠판 심볼과 자체 한국어 문구·원화를 만든다.
-- 실제 본문·제목 조합은 Pretendard, SUIT, Gmarket Sans 후보 화면을 비교해 확정한다.
+- 앱 전체 제목·본문 기본 글꼴은 Gmarket Sans로 한다. CDN에서 불러오며 로드하지 못하면 기기 기본 한글 글꼴을 사용한다.
 - 직업 그림은 13개 직업×3단계의 개별 원화 39개로 제작하고 선명한 16-bit 픽셀 아트 스타일을 사용한다.
-- 저장소 루트의 Angular 21.2 LTS NgModule CSR 앱, Less, Angular Router, Node.js 24, Yarn Berry 4.18.1 Plug'n'Play를 유지한다. Standalone, SSR, npm, `node_modules` 링크 방식은 사용하지 않는다.
+- 저장소 루트의 Angular 18.2 NgModule CSR 앱, Zone.js, Less, Angular Router, Node.js 22, Yarn Berry 4.18.1 Plug'n'Play를 사용한다. Angular 18은 공식 지원이 종료된 버전이며, 프로젝트 호환성을 위해 유지한다. Standalone, SSR, npm, `node_modules` 링크 방식은 사용하지 않는다.
 - Firebase Authentication·Firestore·Storage 모듈형 JS SDK와 기존 `market-mon-51ee9` 프로젝트를 사용한다. Storage는 활동 사진에 사용한다. Cloud Functions와 학생 PIN 로그인은 현재 범위에서 제외한다.
 - 데이터 모델, 접근 권한, 공동 시뮬레이션 상세는 [SIMULATION-SPEC.md](SIMULATION-SPEC.md), 개인 경제·성장·활동·보스 상세는 [CLASSROOM-ECONOMY-SPEC.md](CLASSROOM-ECONOMY-SPEC.md)에 둔다.
 

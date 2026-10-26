@@ -1,4 +1,4 @@
-import { NgModule, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing-module';
@@ -28,7 +28,6 @@ import { DesignPreviewPage } from './pages/design-preview/design-preview';
     SharedModule,
   ],
   providers: [
-    provideBrowserGlobalErrorListeners(),
     FIREBASE_APP_PROVIDER,
     FIREBASE_AUTH_PROVIDER,
     FIRESTORE_PROVIDER,

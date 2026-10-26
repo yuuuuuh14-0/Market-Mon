@@ -5,32 +5,34 @@
 
     @if (profiles.isLoading() && !profiles.profile()) {
       <p class="profile-copy" role="status">계정 정보를 불러오고 있어요…</p>
-    } @else if (profiles.profile(); as profile) {
-      <div class="identity">
-        @if (profile.photoURL) {
-          <img class="avatar" [src]="profile.photoURL" alt="" referrerpolicy="no-referrer">
-        } @else {
-          <span class="avatar avatar-fallback" aria-hidden="true">{{ profile.displayName.slice(0, 1) }}</span>
-        }
-        <div><strong>{{ profile.displayName }}</strong><span>Google 계정으로 로그인됨</span></div>
-      </div>
-
-      <fieldset class="mode-picker" [disabled]="profiles.isLoading()">
-        <legend>기본 화면 모드</legend>
-        <p>이 선택은 화면의 기본 모드만 정해요. 학급별 권한은 교사의 초대와 승인으로 결정됩니다.</p>
-        <label class="mode-option" [class.selected]="profile.accountMode === 'teacher'">
-          <input type="radio" name="accountMode" [checked]="profile.accountMode === 'teacher'" (change)="chooseMode('teacher')">
-          <span><strong>교사</strong><small>학급 운영 화면을 기본으로 사용해요.</small></span>
-        </label>
-        <label class="mode-option" [class.selected]="profile.accountMode === 'student'">
-          <input type="radio" name="accountMode" [checked]="profile.accountMode === 'student'" (change)="chooseMode('student')">
-          <span><strong>학생</strong><small>학급 참여 화면을 기본으로 사용해요.</small></span>
-        </label>
-      </fieldset>
-      @if (profiles.error()) { <p class="profile-error" role="alert">{{ profiles.error() }}</p> }
     } @else {
-      <p class="profile-copy" role="alert">프로필을 불러오지 못했어요.</p>
-      <button class="retry-button" type="button" (click)="auth.retryProfileSync()">다시 시도</button>
+      @if (profiles.profile(); as profile) {
+        <div class="identity">
+          @if (profile.photoURL) {
+            <img class="avatar" [src]="profile.photoURL" alt="" referrerpolicy="no-referrer">
+          } @else {
+            <span class="avatar avatar-fallback" aria-hidden="true">{{ profile.displayName.slice(0, 1) }}</span>
+          }
+          <div><strong>{{ profile.displayName }}</strong><span>Google 계정으로 로그인됨</span></div>
+        </div>
+
+        <fieldset class="mode-picker" [disabled]="profiles.isLoading()">
+          <legend>기본 화면 모드</legend>
+          <p>이 선택은 화면의 기본 모드만 정해요. 학급별 권한은 교사의 초대와 승인으로 결정됩니다.</p>
+          <label class="mode-option" [class.selected]="profile.accountMode === 'teacher'">
+            <input type="radio" name="accountMode" [checked]="profile.accountMode === 'teacher'" (change)="chooseMode('teacher')">
+            <span><strong>교사</strong><small>학급 운영 화면을 기본으로 사용해요.</small></span>
+          </label>
+          <label class="mode-option" [class.selected]="profile.accountMode === 'student'">
+            <input type="radio" name="accountMode" [checked]="profile.accountMode === 'student'" (change)="chooseMode('student')">
+            <span><strong>학생</strong><small>학급 참여 화면을 기본으로 사용해요.</small></span>
+          </label>
+        </fieldset>
+        @if (profiles.error()) { <p class="profile-error" role="alert">{{ profiles.error() }}</p> }
+      } @else {
+        <p class="profile-copy" role="alert">프로필을 불러오지 못했어요.</p>
+        <button class="retry-button" type="button" (click)="auth.retryProfileSync()">다시 시도</button>
+      }
     }
   </div>
 </section>
