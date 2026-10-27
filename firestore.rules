@@ -1,34 +1,150 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function isSignedIn() {
-      return request.auth != null;
+    function signedIn() { return request.auth != null; }
+    function own(uid) { return signedIn() && request.auth.uid == uid; }
+    function teacher(classId) {
+      return signedIn() && exists(/databases/$(database)/documents/classes/$(classId)/members/$(request.auth.uid))
+        && get(/databases/$(database)/documents/classes/$(classId)/members/$(request.auth.uid)).data.role in ['owner', 'teacher'];
     }
-
-    function isOwnUser(uid) {
-      return isSignedIn() && request.auth.uid == uid;
+    function classMember(classId, uid) {
+      return exists(/databases/$(database)/documents/classes/$(classId)/members/$(uid));
     }
-
-    function hasValidProfile() {
+    function activeCode(code, classId) {
+      return exists(/databases/$(database)/documents/joinCodes/$(code))
+        && get(/databases/$(database)/documents/joinCodes/$(code)).data.classId == classId
+        && get(/databases/$(database)/documents/joinCodes/$(code)).data.expiresAt >= request.time.toMillis()
+        && get(/databases/$(database)/documents/classes/$(classId)).data.active == true
+        && get(/databases/$(database)/documents/classes/$(classId)).data.joinCodeGeneration
+          == get(/databases/$(database)/documents/joinCodes/$(code)).data.generation;
+    }
+    function profileValid() {
       return request.resource.data.keys().hasAll(['displayName', 'photoURL', 'accountMode'])
         && request.resource.data.keys().hasOnly(['displayName', 'photoURL', 'accountMode'])
         && request.resource.data.displayName is string
         && request.resource.data.displayName.size() > 0
         && request.resource.data.displayName.size() <= 120
         && (request.resource.data.photoURL == null || request.resource.data.photoURL is string)
-        && (request.resource.data.accountMode == null
-          || request.resource.data.accountMode in ['teacher', 'student']);
+        && (request.resource.data.accountMode == null || request.resource.data.accountMode in ['teacher', 'student']);
     }
 
     match /users/{uid} {
-      allow get: if isOwnUser(uid);
+      allow get: if own(uid);
       allow list: if false;
-      allow create, update: if isOwnUser(uid) && hasValidProfile();
+      allow create, update: if own(uid) && profileValid();
       allow delete: if false;
     }
 
-    match /{document=**} {
-      allow read, write: if false;
+    match /classes/{classId} {
+      allow get: if teacher(classId) || (signedIn() && classMember(classId, request.auth.uid));
+      allow list: if signedIn() && (resource.data.ownerUid == request.auth.uid || classMember(classId, request.auth.uid));
+      allow create: if signedIn() && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.active == true && request.resource.data.nextStudentNumber == 1
+        && request.resource.data.membershipRevision == 0 && request.resource.data.joinCodeGeneration == null
+        && request.resource.data.welcomeMon == null;
+      allow update: if teacher(classId)
+        && request.resource.data.ownerUid == resource.data.ownerUid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['active', 'nextStudentNumber', 'membershipRevision', 'welcomeMon', 'joinCodeGeneration', 'updatedAt'])
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['active']) || resource.data.ownerUid == request.auth.uid)
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['membershipRevision'])
+          || request.resource.data.membershipRevision == resource.data.membershipRevision + 1)
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['nextStudentNumber'])
+          || (request.resource.data.nextStudentNumber == resource.data.nextStudentNumber + 1
+            && request.resource.data.diff(resource.data).affectedKeys().hasAny(['membershipRevision'])));
+      allow delete: if false;
+
+      match /members/{uid} {
+        allow get: if own(uid) || teacher(classId);
+        allow list: if teacher(classId) || (signedIn() && resource.data.uid == request.auth.uid);
+        allow create: if (uid == request.auth.uid && request.resource.data.role == 'owner'
+            && getAfter(/databases/$(database)/documents/classes/$(classId)).data.ownerUid == request.auth.uid)
+          || (teacher(classId) && request.resource.data.role == 'student'
+            && request.resource.data.uid == uid
+            && request.resource.data.studentNumber == getAfter(/databases/$(database)/documents/classes/$(classId)).data.nextStudentNumber - 1
+            && existsAfter(/databases/$(database)/documents/classes/$(classId)/joinRequests/$(uid))
+            && getAfter(/databases/$(database)/documents/classes/$(classId)/joinRequests/$(uid)).data.status == 'approved'
+            && getAfter(/databases/$(database)/documents/classes/$(classId)/joinRequests/$(uid)).data.studentNumber == request.resource.data.studentNumber)
+          || (signedIn() && request.resource.data.uid == request.auth.uid && request.resource.data.role == 'teacher'
+            && existsAfter(/databases/$(database)/documents/teacherInvites/$(request.resource.data.inviteId))
+            && getAfter(/databases/$(database)/documents/teacherInvites/$(request.resource.data.inviteId)).data.status == 'accepted'
+            && getAfter(/databases/$(database)/documents/teacherInvites/$(request.resource.data.inviteId)).data.acceptedBy == request.auth.uid
+            && getAfter(/databases/$(database)/documents/teacherInvites/$(request.resource.data.inviteId)).data.classId == classId);
+        allow update: if teacher(classId) && request.resource.data.uid == resource.data.uid
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['welcomeMonGranted'])
+          && request.resource.data.welcomeMonGranted is int && request.resource.data.welcomeMonGranted >= 0;
+        allow delete: if teacher(classId) && resource.data.role == 'student';
+      }
+
+      match /joinRequests/{uid} {
+        allow get: if own(uid) || teacher(classId);
+        allow list: if teacher(classId);
+        allow create: if own(uid) && request.resource.data.uid == uid
+          && request.resource.data.status == 'pending'
+          && request.resource.data.displayName == request.auth.token.name
+          && request.resource.data.keys().hasOnly(['uid', 'displayName', 'status', 'requestedAt', 'joinCode'])
+          && activeCode(request.resource.data.joinCode, classId);
+        allow update: if (teacher(classId) && request.resource.data.uid == resource.data.uid
+            && request.resource.data.displayName == resource.data.displayName
+            && ((request.resource.data.status == 'rejected'
+                && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'decidedAt']))
+              || (request.resource.data.status == 'approved'
+                && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'decidedAt', 'studentNumber'])
+                && request.resource.data.studentNumber is int
+                && existsAfter(/databases/$(database)/documents/classes/$(classId)/members/$(uid))
+                && getAfter(/databases/$(database)/documents/classes/$(classId)/members/$(uid)).data.studentNumber == request.resource.data.studentNumber)))
+          || (own(uid) && resource.data.status == 'rejected' && request.resource.data.status == 'pending'
+            && request.resource.data.uid == uid && request.resource.data.displayName == request.auth.token.name
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'joinCode', 'requestedAt'])
+            && activeCode(request.resource.data.joinCode, classId));
+        allow delete: if teacher(classId);
+      }
+
+      match /wallets/{uid} {
+        allow get: if own(uid) && classMember(classId, uid) || teacher(classId);
+        allow list: if teacher(classId);
+        allow create: if teacher(classId) && existsAfter(/databases/$(database)/documents/classes/$(classId)/members/$(uid));
+        allow update: if teacher(classId) && classMember(classId, uid);
+        allow delete: if teacher(classId);
+      }
     }
+
+    match /joinCodes/{code} {
+      allow get: if signedIn() && resource.data.expiresAt >= request.time.toMillis()
+        && get(/databases/$(database)/documents/classes/$(resource.data.classId)).data.active == true
+        && get(/databases/$(database)/documents/classes/$(resource.data.classId)).data.joinCodeGeneration == resource.data.generation;
+      allow list: if signedIn() && teacher(resource.data.classId);
+      allow create: if signedIn() && (teacher(request.resource.data.classId)
+          || (getAfter(/databases/$(database)/documents/classes/$(request.resource.data.classId)).data.ownerUid == request.auth.uid
+            && getAfter(/databases/$(database)/documents/classes/$(request.resource.data.classId)/members/$(request.auth.uid)).data.role == 'owner'))
+        && request.resource.data.keys().hasOnly(['classId', 'generation', 'expiresAt', 'schoolName', 'grade', 'className', 'createdAt'])
+        && request.resource.data.schoolName is string && request.resource.data.grade is string
+        && request.resource.data.className is string
+        && getAfter(/databases/$(database)/documents/classes/$(request.resource.data.classId)).data.joinCodeGeneration == request.resource.data.generation
+        && request.resource.data.expiresAt > request.time.toMillis()
+        && request.resource.data.expiresAt <= request.time.toMillis() + 3600000;
+      allow update: if false;
+      allow delete: if teacher(resource.data.classId);
+    }
+
+    match /teacherInvites/{inviteId} {
+      allow get: if signedIn() && (resource.data.createdBy == request.auth.uid
+        || request.auth.token.email == resource.data.targetEmail);
+      allow list: if signedIn() && resource.data.createdBy == request.auth.uid;
+      allow create: if signedIn() && request.resource.data.createdBy == request.auth.uid
+        && get(/databases/$(database)/documents/classes/$(request.resource.data.classId)/members/$(request.auth.uid)).data.role == 'owner'
+        && request.resource.data.targetEmail is string && request.resource.data.status == 'pending'
+        && request.resource.data.expiresAt > request.time.toMillis()
+        && request.resource.data.expiresAt <= request.time.toMillis() + 604800000;
+      allow update: if (signedIn() && request.auth.token.email == resource.data.targetEmail
+          && resource.data.status == 'pending' && resource.data.expiresAt >= request.time.toMillis()
+          && request.resource.data.status == 'accepted' && request.resource.data.acceptedBy == request.auth.uid
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'acceptedBy', 'acceptedAt']))
+        || (teacher(resource.data.classId) && resource.data.createdBy == request.auth.uid
+          && request.resource.data.status == 'revoked'
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']));
+      allow delete: if false;
+    }
+
+    match /{document=**} { allow read, write: if false; }
   }
 }

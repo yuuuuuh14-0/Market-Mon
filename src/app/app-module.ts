@@ -12,6 +12,10 @@ import { FIRESTORE_PROVIDER } from './core/firebase-firestore';
 import { SharedModule } from './shared/shared-module';
 import { ProfilePage } from './pages/profile/profile';
 import { DesignPreviewPage } from './pages/design-preview/design-preview';
+import { ClassroomPage } from './pages/classroom/classroom';
+import { JoinPage } from './pages/join/join';
+import { StartPage } from './pages/start/start';
+import { InvitePage } from './pages/invite/invite';
 
 @NgModule({
   declarations: [
@@ -21,6 +25,10 @@ import { DesignPreviewPage } from './pages/design-preview/design-preview';
     ProfilePage,
     NotFoundPage,
     DesignPreviewPage,
+    ClassroomPage,
+    JoinPage,
+    StartPage,
+    InvitePage,
   ],
   imports: [
     BrowserModule,

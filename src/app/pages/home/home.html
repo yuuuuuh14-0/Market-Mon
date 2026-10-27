@@ -6,7 +6,7 @@
       <p class="hero-description">내가 한 활동은 나의 지갑에,<br>친구와 세운 목표는 우리 반의 기록에.</p>
       <div class="hero-actions">
         @if (auth.user()) {
-          <a class="button button-primary" routerLink="/profile">내 프로필 열기 <span aria-hidden="true">↗</span></a>
+          <a class="button button-primary" routerLink="/start">우리 반 화면 열기 <span aria-hidden="true">↗</span></a>
         } @else {
           <a class="button button-primary" routerLink="/login">교실 경제 시작하기 <span aria-hidden="true">↗</span></a>
         }
@@ -113,7 +113,7 @@
     <div class="start-band">
       <div><p class="eyebrow">GET STARTED</p><h3>우리 반 경제를 시작해요.</h3><p>현재는 Google 로그인과 프로필을 이용할 수 있어요. 학급 기능은 다음 단계에서 추가됩니다.</p></div>
       @if (auth.user()) {
-        <a class="button button-primary" routerLink="/profile">내 프로필 보기 <span aria-hidden="true">↗</span></a>
+        <a class="button button-primary" routerLink="/start">우리 반 화면 열기 <span aria-hidden="true">↗</span></a>
       } @else {
         <a class="button button-primary" routerLink="/login">Google 로그인 <span aria-hidden="true">↗</span></a>
       }
