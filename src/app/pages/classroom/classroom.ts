@@ -69,6 +69,6 @@ export class ClassroomPage {
     try { if (!navigator.clipboard?.writeText) return false; await navigator.clipboard.writeText(value); return true; }
     catch { return false; }
   }
-  async remove(uid: string, displayName: string): Promise<void> { if (!this.classId || !window.confirm(`${displayName} 학생의 이 학급 기록과 지갑을 삭제할까요? 번호는 재사용되지 않습니다.`)) return; try { await this.classrooms.removeStudent(this.classId, uid); this.message.set('학생의 이 학급 기록을 삭제했어요. 배정 번호는 다시 사용하지 않아요.'); await this.loadClass(); } catch (e) { this.message.set(e instanceof Error ? e.message : '학생 기록을 삭제하지 못했어요.'); } }
+  async remove(uid: string, displayName: string): Promise<void> { if (!this.classId || !window.confirm(`${displayName} 학생의 이 학급 기록과 지갑을 삭제할까요?`)) return; try { await this.classrooms.removeStudent(this.classId, uid); this.message.set('학생의 이 학급 기록을 삭제했어요.'); await this.loadClass(); } catch (e) { this.message.set(e instanceof Error ? e.message : '학생 기록을 삭제하지 못했어요.'); } }
   async toggleClass(): Promise<void> { const user = this.auth.user(); const room = this.classroom(); if (!user || !room) return; try { await this.classrooms.setClassActive(user, room.id, !room.active); this.message.set(room.active ? '학급을 보관 상태로 바꿨어요.' : '학급을 다시 활성화했어요.'); await this.loadClass(); } catch (e) { this.message.set(e instanceof Error ? e.message : '학급 상태를 변경하지 못했어요.'); } }
 }

@@ -8,9 +8,9 @@ import {
 import { FIRESTORE } from './firebase-firestore';
 
 export type SchoolGrade = '유치원' | '초1' | '초2' | '초3' | '초4' | '초5' | '초6' | '중1' | '중2' | '중3' | '고1' | '고2' | '고3' | '기타';
-export interface Classroom { id: string; schoolName: string; className: string; grade: string; ownerUid: string; active: boolean; nextStudentNumber: number; welcomeMon: number | null; joinCodeGeneration?: string; }
+export interface Classroom { id: string; schoolName: string; className: string; grade: string; ownerUid: string; active: boolean; welcomeMon: number | null; joinCodeGeneration?: string; }
 export interface JoinRequest { uid: string; displayName: string; status: 'pending' | 'rejected'; requestedAt?: unknown; }
-export interface ClassroomMember { uid: string; displayName: string; role: string; studentNumber?: number; }
+export interface ClassroomMember { uid: string; displayName: string; role: string; }
 
 interface JoinCodePreview {
   classId: string;
@@ -41,7 +41,7 @@ export class ClassroomService {
     if (cleanSchool.length > 100 || cleanGrade.length > 100 || cleanClass.length > 80) throw new Error('입력한 학급 정보가 너무 길어요.');
     const classRef = doc(collection(this.db, 'classes'));
     const batch = writeBatch(this.db);
-    batch.set(classRef, { schoolName: cleanSchool, grade: cleanGrade, className: cleanClass, ownerUid: user.uid, active: true, nextStudentNumber: 1, membershipRevision: 0, welcomeMon: null, joinCodeGeneration: null, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+    batch.set(classRef, { schoolName: cleanSchool, grade: cleanGrade, className: cleanClass, ownerUid: user.uid, active: true, membershipRevision: 0, welcomeMon: null, joinCodeGeneration: null, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
     batch.set(doc(classRef, 'members', user.uid), { uid: user.uid, displayName: user.displayName || '교사', role: 'owner', joinedAt: serverTimestamp() });
     await batch.commit();
     return classRef.id;
@@ -98,10 +98,10 @@ export class ClassroomService {
     return result.docs.map((item) => ({ ...item.data() } as JoinRequest));
   }
 
-  async getStudentState(classId: string, uid: string): Promise<{ status: 'pending' | 'rejected' | 'approved' | null; studentNumber?: number }> {
+  async getStudentState(classId: string, uid: string): Promise<{ status: 'pending' | 'rejected' | 'approved' | null }> {
     const classRef = doc(this.db, 'classes', classId);
     const [member, request] = await Promise.all([getDoc(doc(classRef, 'members', uid)), getDoc(doc(classRef, 'joinRequests', uid))]);
-    if (member.exists() && member.data()['role'] === 'student') return { status: 'approved', studentNumber: Number(member.data()['studentNumber']) };
+    if (member.exists() && member.data()['role'] === 'student') return { status: 'approved' };
     return { status: request.exists() && ['pending', 'rejected'].includes(String(request.data()['status'])) ? request.data()['status'] as 'pending' | 'rejected' : null };
   }
 
@@ -143,16 +143,15 @@ export class ClassroomService {
       if (!approve) { tx.update(requestRef, { status: 'rejected', decidedAt: serverTimestamp() }); return; }
       if (memberSnap.exists()) {
         if (memberSnap.data()['role'] !== 'student') throw new Error('이미 다른 역할로 참여 중인 계정이에요.');
-        tx.update(requestRef, { status: 'approved', decidedAt: serverTimestamp(), studentNumber: memberSnap.data()['studentNumber'] });
+        tx.update(requestRef, { status: 'approved', decidedAt: serverTimestamp() });
         return;
       }
       const data = classSnap.data();
-      const number = Number(data['nextStudentNumber'] || 1);
       const welcome = data['welcomeMon'] == null ? 0 : Number(data['welcomeMon']);
-      tx.update(classRef, { nextStudentNumber: number + 1, membershipRevision: Number(data['membershipRevision'] || 0) + 1, updatedAt: serverTimestamp() });
-      tx.set(memberRef, { uid, displayName: requestSnap.data()['displayName'], role: 'student', studentNumber: number, welcomeMonGranted: welcome, joinedAt: serverTimestamp() });
+      tx.update(classRef, { membershipRevision: Number(data['membershipRevision'] || 0) + 1, updatedAt: serverTimestamp() });
+      tx.set(memberRef, { uid, displayName: requestSnap.data()['displayName'], role: 'student', welcomeMonGranted: welcome, joinedAt: serverTimestamp() });
       tx.set(walletRef, { balance: (walletSnap.exists() ? Number(walletSnap.data()['balance'] || 0) : 0) + welcome, updatedAt: serverTimestamp() });
-      tx.update(requestRef, { status: 'approved', decidedAt: serverTimestamp(), studentNumber: number });
+      tx.update(requestRef, { status: 'approved', decidedAt: serverTimestamp() });
     });
   }
 

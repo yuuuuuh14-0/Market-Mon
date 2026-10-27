@@ -39,18 +39,15 @@ service cloud.firestore {
       allow get: if teacher(classId) || (signedIn() && classMember(classId, request.auth.uid));
       allow list: if signedIn() && (resource.data.ownerUid == request.auth.uid || classMember(classId, request.auth.uid));
       allow create: if signedIn() && request.resource.data.ownerUid == request.auth.uid
-        && request.resource.data.active == true && request.resource.data.nextStudentNumber == 1
+        && request.resource.data.active == true
         && request.resource.data.membershipRevision == 0 && request.resource.data.joinCodeGeneration == null
         && request.resource.data.welcomeMon == null;
       allow update: if teacher(classId)
         && request.resource.data.ownerUid == resource.data.ownerUid
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['active', 'nextStudentNumber', 'membershipRevision', 'welcomeMon', 'joinCodeGeneration', 'updatedAt'])
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['active', 'membershipRevision', 'welcomeMon', 'joinCodeGeneration', 'updatedAt'])
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['active']) || resource.data.ownerUid == request.auth.uid)
         && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['membershipRevision'])
-          || request.resource.data.membershipRevision == resource.data.membershipRevision + 1)
-        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['nextStudentNumber'])
-          || (request.resource.data.nextStudentNumber == resource.data.nextStudentNumber + 1
-            && request.resource.data.diff(resource.data).affectedKeys().hasAny(['membershipRevision'])));
+          || request.resource.data.membershipRevision == resource.data.membershipRevision + 1);
       allow delete: if false;
 
       match /members/{uid} {
@@ -60,10 +57,8 @@ service cloud.firestore {
             && getAfter(/databases/$(database)/documents/classes/$(classId)).data.ownerUid == request.auth.uid)
           || (teacher(classId) && request.resource.data.role == 'student'
             && request.resource.data.uid == uid
-            && request.resource.data.studentNumber == getAfter(/databases/$(database)/documents/classes/$(classId)).data.nextStudentNumber - 1
             && existsAfter(/databases/$(database)/documents/classes/$(classId)/joinRequests/$(uid))
-            && getAfter(/databases/$(database)/documents/classes/$(classId)/joinRequests/$(uid)).data.status == 'approved'
-            && getAfter(/databases/$(database)/documents/classes/$(classId)/joinRequests/$(uid)).data.studentNumber == request.resource.data.studentNumber)
+            && getAfter(/databases/$(database)/documents/classes/$(classId)/joinRequests/$(uid)).data.status == 'approved')
           || (signedIn() && request.resource.data.uid == request.auth.uid && request.resource.data.role == 'teacher'
             && existsAfter(/databases/$(database)/documents/teacherInvites/$(request.resource.data.inviteId))
             && getAfter(/databases/$(database)/documents/teacherInvites/$(request.resource.data.inviteId)).data.status == 'accepted'
@@ -88,10 +83,9 @@ service cloud.firestore {
             && ((request.resource.data.status == 'rejected'
                 && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'decidedAt']))
               || (request.resource.data.status == 'approved'
-                && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'decidedAt', 'studentNumber'])
-                && request.resource.data.studentNumber is int
+                && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'decidedAt'])
                 && existsAfter(/databases/$(database)/documents/classes/$(classId)/members/$(uid))
-                && getAfter(/databases/$(database)/documents/classes/$(classId)/members/$(uid)).data.studentNumber == request.resource.data.studentNumber)))
+                && getAfter(/databases/$(database)/documents/classes/$(classId)/members/$(uid)).data.role == 'student')))
           || (own(uid) && resource.data.status == 'rejected' && request.resource.data.status == 'pending'
             && request.resource.data.uid == uid && request.resource.data.displayName == request.auth.token.name
             && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'joinCode', 'requestedAt'])
